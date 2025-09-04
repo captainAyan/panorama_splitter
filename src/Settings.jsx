@@ -5,6 +5,8 @@ export default function Settings({
   setAspectRatio,
   fillColor,
   setFillColor,
+  padding,
+  setPadding,
 }) {
   const handleAspectRatioChange = (e) => {
     setAspectRatio(e.target.value);
@@ -12,6 +14,10 @@ export default function Settings({
 
   const handleFillColorChange = (e) => {
     setFillColor(e.target.value);
+  };
+
+  const handlePaddingChange = (e) => {
+    setPadding(parseInt(e.target.value) || 0);
   };
 
   return (
@@ -81,6 +87,16 @@ export default function Settings({
           ></span>
           <span className="custom-radio-label">White</span>
         </label>
+      </div>
+
+      <h2 className="card-header">Full image padding</h2>
+      <div>
+        <input
+          type="text"
+          className="text-input"
+          value={padding}
+          onChange={handlePaddingChange}
+        />
       </div>
     </>
   );

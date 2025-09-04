@@ -40,6 +40,9 @@ html {
       #ed625d 75%,
       #03232d 100%
     );
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
   padding: 60px 20px;
   display: flex;
   justify-content: center;
@@ -104,24 +107,6 @@ html {
   flex: 1;
 }
 
-.radio-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.radio-option {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  border: 2px solid #ddd;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: border-color 0.3s, background-color 0.3s;
-  user-select: none;
-}
-
 /* Grid container */
 .image-grid {
   display: grid;
@@ -138,6 +123,36 @@ html {
   border: #777 solid 2px;
   border-radius: 16px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.text-input {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+  padding: 16px 16px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.3s, background-color 0.3s;
+  user-select: none;
 }
 
 .radio-option:hover {
@@ -243,12 +258,31 @@ html {
   background-color: #d35652;
 }
 
-.button.generate-button {
-  background-color: #57efed;
+@keyframes anime {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-.button.generate-button:hover {
-  background-color: #49c9c7;
+.button.generate-button {
+  background: linear-gradient(
+    -45deg,
+    #84ffc9,
+    #aab2ff,
+    #eca0ff,
+    #ffa63d,
+    #f24389,
+    #a478f1,
+    #338aff
+  );
+  background-size: 500%;
+  animation: anime 10s linear infinite;
 }
 
 footer {
@@ -257,5 +291,5 @@ footer {
   padding: 1rem 1rem;
   text-align: center;
   color: white;
-  margin: 4rem auto;
+  margin-top: 4rem;
 }

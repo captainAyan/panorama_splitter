@@ -12,6 +12,7 @@ function App() {
   const [image, setImage] = useState();
   const [aspectRatio, setAspectRatio] = useState(AspectRatio.FourToFive);
   const [fillColor, setFillColor] = useState(FillColor.BLACK);
+  const [padding, setPadding] = useState(10);
 
   const handleImageRemoval = () => {
     setImage(null);
@@ -49,6 +50,25 @@ function App() {
       imageSources = [...imageSources, canvas.toDataURL()];
     }
 
+    // Full panorama slide
+    ctx.fillStyle = fillColor;
+    ctx.fillRect(0, 0, frame_width, frame_height);
+    ctx.fill();
+
+    let paddingAdjustedFrameWidth = frame_width - padding * 2;
+    let scaledImageHeight =
+      (paddingAdjustedFrameWidth / image.width) * frame_height;
+
+    ctx.drawImage(
+      image,
+      padding,
+      (frame_height - scaledImageHeight) / 2,
+      frame_width - padding * 2,
+      scaledImageHeight
+    );
+
+    imageSources = [...imageSources, canvas.toDataURL()];
+
     setSlices(imageSources);
   };
 
@@ -72,11 +92,15 @@ function App() {
 
               {image && (
                 <>
-                  <Viewer imageLink={image.src} />
+                  {/* <Viewer imageLink={image.src} /> */}
 
                   <img
                     src={image.src}
-                    style={{ width: "100%", borderRadius: "16px" }}
+                    style={{
+                      width: "100%",
+                      marginTop: "20px",
+                      borderRadius: "16px",
+                    }}
                   />
 
                   <div
@@ -110,6 +134,8 @@ function App() {
                 setAspectRatio={setAspectRatio}
                 fillColor={fillColor}
                 setFillColor={setFillColor}
+                padding={padding}
+                setPadding={setPadding}
               />
 
               {image && <Details image={image} aspectRatio={aspectRatio} />}
