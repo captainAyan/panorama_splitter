@@ -1,7 +1,7 @@
 export default function Details({ image, aspectRatio: ratio }) {
   return (
     <>
-      <h2 className="card-header">Image Details</h2>
+      <h2 className="card-header">Image details</h2>
 
       <table style={{ width: "100%" }}>
         <tbody>
@@ -14,18 +14,13 @@ export default function Details({ image, aspectRatio: ratio }) {
           <tr>
             <td>Number of Slices: </td>
             <td style={{ textAlign: "right" }}>
-              {Math.ceil(
-                image?.width /
-                  ((image?.height / ratio.denominator) * ratio.numerator)
-              )}
+              {Math.ceil(image?.width / (image?.height * ratio))}
             </td>
           </tr>
           <tr>
             <td>Slice Resolution: </td>
             <td style={{ textAlign: "right" }}>
-              {Math.floor(
-                (image?.height / ratio.denominator) * ratio.numerator
-              )}
+              {Math.floor(image?.height * ratio)}
               px x {image?.height}px
             </td>
           </tr>

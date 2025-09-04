@@ -4,35 +4,18 @@ import "./App.css";
 import Uploader from "./Uploader";
 import Viewer from "./Viewer";
 import Details from "./Details";
-
-const AspectRatio = Object.freeze({
-  FourToFive: {
-    label: "4:5",
-    numerator: 4,
-    denominator: 5,
-  },
-  Square: {
-    label: "1:1",
-    numerator: 1,
-    denominator: 1,
-  },
-});
+import Settings from "./Settings";
+import { AspectRatio, FillColor } from "./constants";
 
 function App() {
   const [file, setFile] = useState();
   const [slices, setSlices] = useState([]);
   const [image, setImage] = useState();
   const [aspectRatio, setAspectRatio] = useState(AspectRatio.FourToFive);
+  const [fillColor, setFillColor] = useState(FillColor.BLACK);
 
   const handleImageRemoval = (e) => {
     setFile(null);
-  };
-
-  const handleAspectRatioChange = (e) => {
-    if (e.target.value === AspectRatio.FourToFive.label)
-      setAspectRatio(AspectRatio.FourToFive);
-    else if (e.target.value === AspectRatio.Square.label)
-      setAspectRatio(AspectRatio.Square);
   };
 
   useEffect(() => {
@@ -60,9 +43,7 @@ function App() {
     const ctx = canvas.getContext("2d");
 
     const frame_height = image.height;
-    const frame_width = parseInt(
-      (frame_height * aspectRatio.numerator) / aspectRatio.denominator
-    );
+    const frame_width = parseInt(frame_height * aspectRatio);
 
     canvas.width = frame_width;
     canvas.height = frame_height;
@@ -70,7 +51,7 @@ function App() {
     let imageSources = [];
 
     for (let i = 0; i < Math.ceil(image.width / frame_width); i++) {
-      ctx.fillStyle = "black";
+      ctx.fillStyle = fillColor;
       ctx.fillRect(0, 0, frame_width, frame_height);
       ctx.fill();
 
@@ -146,31 +127,12 @@ function App() {
             </div>
 
             <div className="card card-right">
-              <h2 className="card-header">Choose aspect ratio</h2>
-
-              <div className="radio-group">
-                <label className="radio-option">
-                  <input
-                    type="radio"
-                    name="aspectRatio"
-                    value={AspectRatio.FourToFive.label}
-                    checked={aspectRatio.label == AspectRatio.FourToFive.label}
-                    onChange={handleAspectRatioChange}
-                  />
-                  <span className="custom-radio-label">4:5 ratio</span>
-                </label>
-
-                <label className="radio-option">
-                  <input
-                    type="radio"
-                    name="aspectRatio"
-                    value={AspectRatio.Square.label}
-                    checked={aspectRatio.label == AspectRatio.Square.label}
-                    onChange={handleAspectRatioChange}
-                  />
-                  <span className="custom-radio-label">Square</span>
-                </label>
-              </div>
+              <Settings
+                aspectRatio={aspectRatio}
+                setAspectRatio={setAspectRatio}
+                fillColor={fillColor}
+                setFillColor={setFillColor}
+              />
 
               {image && <Details image={image} aspectRatio={aspectRatio} />}
             </div>
@@ -181,8 +143,8 @@ function App() {
               <h2 className="card-header">Create your panorama slides</h2>
               <div className="image-grid">
                 {slices?.map((s, i) => (
-                  <a href={s} target="_blank" download>
-                    <img src={s} alt="" className="sliced-image" key={i} />
+                  <a href={s} target="_blank" download key={i}>
+                    <img src={s} alt="" className="sliced-image" />
                   </a>
                 ))}
               </div>

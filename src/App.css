@@ -111,23 +111,6 @@ html {
   margin-top: 20px;
 }
 
-/* Grid container */
-.image-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
-  margin-top: 1rem;
-}
-
-/* Image class */
-.sliced-image {
-  max-height: 150px;
-  height: auto;
-  object-fit: contain;
-  border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
 .radio-option {
   display: flex;
   align-items: center;
@@ -137,6 +120,24 @@ html {
   cursor: pointer;
   transition: border-color 0.3s, background-color 0.3s;
   user-select: none;
+}
+
+/* Grid container */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 2rem;
+}
+
+/* Image class */
+.sliced-image {
+  max-height: 150px;
+  height: auto;
+  object-fit: contain;
+  border: #777 solid 2px;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .radio-option:hover {
