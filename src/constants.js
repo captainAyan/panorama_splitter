@@ -7,3 +7,5 @@ export const FillColor = Object.freeze({
   WHITE: "white",
   BLACK: "black",
 });
+
+export const DefaultPadding = 10;

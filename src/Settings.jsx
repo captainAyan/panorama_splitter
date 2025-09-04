@@ -1,13 +1,15 @@
+import { useStore } from "./store";
 import { AspectRatio, FillColor } from "./constants";
 
-export default function Settings({
-  aspectRatio,
-  setAspectRatio,
-  fillColor,
-  setFillColor,
-  padding,
-  setPadding,
-}) {
+export default function Settings() {
+  const aspectRatio = useStore((state) => state.aspectRatio);
+  const fillColor = useStore((state) => state.fillColor);
+  const padding = useStore((state) => state.padding);
+
+  const setAspectRatio = useStore((state) => state.setAspectRatio);
+  const setFillColor = useStore((state) => state.setFillColor);
+  const setPadding = useStore((state) => state.setPadding);
+
   const handleAspectRatioChange = (e) => {
     setAspectRatio(e.target.value);
   };

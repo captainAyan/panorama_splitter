@@ -1,18 +1,19 @@
 import { useState } from "react";
+import { useStore } from "./store";
 
 import "./App.css";
 import Uploader from "./Uploader";
 import Viewer from "./Viewer";
 import Details from "./Details";
 import Settings from "./Settings";
-import { AspectRatio, FillColor } from "./constants";
 
 function App() {
   const [slices, setSlices] = useState([]);
   const [image, setImage] = useState();
-  const [aspectRatio, setAspectRatio] = useState(AspectRatio.FourToFive);
-  const [fillColor, setFillColor] = useState(FillColor.BLACK);
-  const [padding, setPadding] = useState(10);
+
+  const aspectRatio = useStore((state) => state.aspectRatio);
+  const fillColor = useStore((state) => state.fillColor);
+  const padding = useStore((state) => state.padding);
 
   const handleImageRemoval = () => {
     setImage(null);
@@ -129,14 +130,7 @@ function App() {
             </div>
 
             <div className="card card-right">
-              <Settings
-                aspectRatio={aspectRatio}
-                setAspectRatio={setAspectRatio}
-                fillColor={fillColor}
-                setFillColor={setFillColor}
-                padding={padding}
-                setPadding={setPadding}
-              />
+              <Settings />
 
               {image && <Details image={image} aspectRatio={aspectRatio} />}
             </div>
