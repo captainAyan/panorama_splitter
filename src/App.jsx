@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import "./App.css";
 import Uploader from "./Uploader";
@@ -8,37 +8,16 @@ import Settings from "./Settings";
 import { AspectRatio, FillColor } from "./constants";
 
 function App() {
-  const [file, setFile] = useState();
   const [slices, setSlices] = useState([]);
   const [image, setImage] = useState();
   const [aspectRatio, setAspectRatio] = useState(AspectRatio.FourToFive);
   const [fillColor, setFillColor] = useState(FillColor.BLACK);
 
-  const handleImageRemoval = (e) => {
-    setFile(null);
+  const handleImageRemoval = () => {
+    setImage(null);
   };
 
-  useEffect(() => {
-    if (file) {
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-
-      img.onload = () => {
-        setImage(img);
-      };
-    } else {
-      setImage(null);
-    }
-  }, [file]);
-
   const handleGenerate = () => {
-    if (!file) {
-      console.log("no files selected");
-      return;
-    }
-
-    console.log("width: ", image.width, "height: ", image.height);
-
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
 
@@ -89,15 +68,14 @@ function App() {
             <div className="card card-left">
               <h2 className="card-header">Create your panorama slides</h2>
 
-              {!file && <Uploader setFile={setFile} />}
+              {!image && <Uploader setImage={setImage} />}
 
-              {/* FILE ADDED view */}
-              {file && (
+              {image && (
                 <>
-                  <Viewer imageLink={URL.createObjectURL(file)} />
+                  <Viewer imageLink={image.src} />
 
                   <img
-                    src={URL.createObjectURL(file)}
+                    src={image.src}
                     style={{ width: "100%", borderRadius: "16px" }}
                   />
 

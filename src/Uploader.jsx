@@ -1,11 +1,27 @@
 import { useState, useRef } from "react";
 
-export default function Uploader({ setFile }) {
+export default function Uploader({ setImage }) {
   const [isDragging, setIsDragging] = useState(false);
+  const [error, setError] = useState();
   const fileInputRef = useRef(null);
 
+  const setImageFromFile = (file) => {
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+
+    img.onload = () => {
+      setImage(img);
+    };
+
+    img.onerror = () => {
+      setError("Image failed to load");
+    };
+  };
+
   const handleFileChange = (e) => {
-    if (e.target.files[0]) setFile(e.target.files[0]);
+    if (e.target.files[0]) {
+      setImageFromFile(e.target.files[0]);
+    }
   };
 
   const handleUploadClick = (e) => {
@@ -18,24 +34,19 @@ export default function Uploader({ setFile }) {
 
   const handleDragEnter = (e) => {
     e.preventDefault();
-    console.log("enter");
     setIsDragging(true);
   };
 
   const handleDragLeave = (e) => {
     e.preventDefault();
-    if (isDragging) {
-      console.log("exit");
-      setIsDragging(false);
-    }
+    setIsDragging(false);
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
     if (isDragging) {
       setIsDragging(false);
-      console.log("drop");
-      setFile(e.dataTransfer.files[0]);
+      setImageFromFile(e.dataTransfer.files[0]);
     }
   };
 
@@ -56,7 +67,11 @@ export default function Uploader({ setFile }) {
             </span>
             <h3 className="upload-title no-drag">Panorama Image</h3>
             <div className="upload-subtitle no-drag">
-              Click to upload your original image
+              Click or Drag to upload your original image
+            </div>
+
+            <div className="upload-subtitle no-drag" style={{ color: "red" }}>
+              {error}
             </div>
           </>
         ) : (
