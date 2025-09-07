@@ -1,4 +1,8 @@
-export default function Details({ image, aspectRatio: ratio }) {
+import { useStore } from "./store";
+
+export default function Details({ image }) {
+  const aspectRatio = useStore((store) => store.aspectRatio);
+
   return (
     <>
       <h2 className="card-header">Image details</h2>
@@ -14,13 +18,13 @@ export default function Details({ image, aspectRatio: ratio }) {
           <tr>
             <td>Number of Slices: </td>
             <td style={{ textAlign: "right" }}>
-              {Math.ceil(image?.width / (image?.height * ratio))}
+              {Math.ceil(image?.width / (image?.height * aspectRatio))}
             </td>
           </tr>
           <tr>
             <td>Slice Resolution: </td>
             <td style={{ textAlign: "right" }}>
-              {Math.floor(image?.height * ratio)}
+              {Math.floor(image?.height * aspectRatio)}
               px x {image?.height}px
             </td>
           </tr>

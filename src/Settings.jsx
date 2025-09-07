@@ -1,14 +1,16 @@
 import { useStore } from "./store";
-import { AspectRatio, FillColor } from "./constants";
+import { AspectRatio, CroppingSettings, FillColor } from "./constants";
 
 export default function Settings() {
   const aspectRatio = useStore((state) => state.aspectRatio);
   const fillColor = useStore((state) => state.fillColor);
   const padding = useStore((state) => state.padding);
+  const allowCropping = useStore((state) => state.allowCropping);
 
   const setAspectRatio = useStore((state) => state.setAspectRatio);
   const setFillColor = useStore((state) => state.setFillColor);
   const setPadding = useStore((state) => state.setPadding);
+  const setAllowCropping = useStore((state) => state.setAllowCropping);
 
   const handleAspectRatioChange = (e) => {
     setAspectRatio(e.target.value);
@@ -20,6 +22,10 @@ export default function Settings() {
 
   const handlePaddingChange = (e) => {
     setPadding(parseInt(e.target.value) || 0);
+  };
+
+  const handleAllowCroppingChange = (e) => {
+    setAllowCropping(e.target.value);
   };
 
   return (
@@ -99,6 +105,31 @@ export default function Settings() {
           value={padding}
           onChange={handlePaddingChange}
         />
+      </div>
+
+      <h2 className="card-header">Allow Cropping</h2>
+      <div className="radio-group">
+        <label className="radio-option">
+          <input
+            type="radio"
+            name="allowCropping"
+            value={CroppingSettings.NO_CROPPING}
+            checked={allowCropping === CroppingSettings.NO_CROPPING}
+            onChange={handleAllowCroppingChange}
+          />
+          <span className="custom-radio-label">No Crop</span>
+        </label>
+
+        <label className="radio-option">
+          <input
+            type="radio"
+            name="allowCropping"
+            value={CroppingSettings.ALLOW_CROPPING}
+            checked={allowCropping === CroppingSettings.ALLOW_CROPPING}
+            onChange={handleAllowCroppingChange}
+          />
+          <span className="custom-radio-label">Crop</span>
+        </label>
       </div>
     </>
   );

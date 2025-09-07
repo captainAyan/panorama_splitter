@@ -1,5 +1,10 @@
 import { create } from "zustand";
-import { AspectRatio, FillColor, DefaultPadding } from "./constants";
+import {
+  AspectRatio,
+  FillColor,
+  DefaultPadding,
+  CroppingSettings,
+} from "./constants";
 
 // Load initial state from localStorage
 const savedState = localStorage.getItem("appState");
@@ -9,6 +14,7 @@ const initialState = savedState
       aspectRatio: AspectRatio.FourToFive,
       fillColor: FillColor.WHITE,
       padding: DefaultPadding,
+      allowCropping: CroppingSettings.NO_CROPPING,
     };
 
 export const useStore = create((set) => ({
@@ -17,9 +23,16 @@ export const useStore = create((set) => ({
   setAspectRatio: (value) => set({ aspectRatio: value }),
   setFillColor: (value) => set({ fillColor: value }),
   setPadding: (value) => set({ padding: value }),
+  setAllowCropping: (value) => set({ allowCropping: value }),
 }));
 
 useStore.subscribe((state) => {
-  const { setAspectRatio, setFillColor, setPadding, ...pureState } = state;
+  const {
+    setAspectRatio,
+    setFillColor,
+    setPadding,
+    setAllowCropping,
+    ...pureState
+  } = state;
   localStorage.setItem("appState", JSON.stringify(pureState));
 });

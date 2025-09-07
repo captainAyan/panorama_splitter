@@ -3,17 +3,20 @@ import { useStore } from "./store";
 
 import "./App.css";
 import Uploader from "./Uploader";
-import Viewer from "./Viewer";
 import Details from "./Details";
 import Settings from "./Settings";
+import Cropper from "./Cropper";
+import { CroppingSettings } from "./constants";
 
 function App() {
   const [slices, setSlices] = useState([]);
   const [image, setImage] = useState();
+  const [cropData, setCropData] = useState();
 
   const aspectRatio = useStore((state) => state.aspectRatio);
   const fillColor = useStore((state) => state.fillColor);
   const padding = useStore((state) => state.padding);
+  const allowCropping = useStore((state) => state.allowCropping);
 
   const handleImageRemoval = () => {
     setImage(null);
@@ -23,29 +26,45 @@ function App() {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
 
-    const frame_height = image.height;
-    const frame_width = parseInt(frame_height * aspectRatio);
+    const frameHeight =
+      cropData && allowCropping ? cropData.height : image.height;
+    const frameWidth = parseInt(frameHeight * aspectRatio);
 
-    canvas.width = frame_width;
-    canvas.height = frame_height;
+    canvas.width = frameWidth;
+    canvas.height = frameHeight;
 
     let imageSources = [];
 
-    for (let i = 0; i < Math.ceil(image.width / frame_width); i++) {
+    let sliceCount =
+      cropData && allowCropping
+        ? Math.ceil(cropData.width / frameWidth)
+        : Math.ceil(image.width / frameWidth);
+    for (let i = 0; i < sliceCount; i++) {
       ctx.fillStyle = fillColor;
-      ctx.fillRect(0, 0, frame_width, frame_height);
+      ctx.fillRect(0, 0, frameWidth, frameHeight);
       ctx.fill();
+
+      let startingPoint =
+        cropData && allowCropping
+          ? {
+              x: frameWidth * i + cropData.x,
+              y: cropData.y,
+            }
+          : {
+              x: frameWidth * i,
+              y: 0,
+            };
 
       ctx.drawImage(
         image,
-        frame_width * i,
+        startingPoint.x,
+        startingPoint.y,
+        frameWidth,
+        frameHeight,
         0,
-        frame_width,
-        frame_height,
         0,
-        0,
-        frame_width,
-        frame_height
+        frameWidth,
+        frameHeight
       );
 
       imageSources = [...imageSources, canvas.toDataURL()];
@@ -53,18 +72,18 @@ function App() {
 
     // Full panorama slide
     ctx.fillStyle = fillColor;
-    ctx.fillRect(0, 0, frame_width, frame_height);
+    ctx.fillRect(0, 0, frameWidth, frameHeight);
     ctx.fill();
 
-    let paddingAdjustedFrameWidth = frame_width - padding * 2;
+    let paddingAdjustedFrameWidth = frameWidth - padding * 2;
     let scaledImageHeight =
-      (paddingAdjustedFrameWidth / image.width) * frame_height;
+      (paddingAdjustedFrameWidth / image.width) * frameHeight;
 
     ctx.drawImage(
       image,
       padding,
-      (frame_height - scaledImageHeight) / 2,
-      frame_width - padding * 2,
+      (frameHeight - scaledImageHeight) / 2,
+      frameWidth - padding * 2,
       scaledImageHeight
     );
 
@@ -93,16 +112,20 @@ function App() {
 
               {image && (
                 <>
-                  {/* <Viewer imageLink={image.src} /> */}
-
-                  <img
-                    src={image.src}
-                    style={{
-                      width: "100%",
-                      marginTop: "20px",
-                      borderRadius: "16px",
-                    }}
-                  />
+                  {allowCropping === CroppingSettings.ALLOW_CROPPING && (
+                    <Cropper image={image} setCropData={setCropData} />
+                  )}
+                  {allowCropping === CroppingSettings.NO_CROPPING && (
+                    <img
+                      src={image.src}
+                      style={{
+                        width: "100%",
+                        marginTop: "20px",
+                        display: "block",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  )}
 
                   <div
                     style={{
@@ -132,13 +155,13 @@ function App() {
             <div className="card card-right">
               <Settings />
 
-              {image && <Details image={image} aspectRatio={aspectRatio} />}
+              {image && <Details image={image} />}
             </div>
           </div>
 
           {slices.length !== 0 && (
             <div className="card" style={{ marginTop: "32px" }}>
-              <h2 className="card-header">Create your panorama slides</h2>
+              <h2 className="card-header">Panorama Slides</h2>
               <div className="image-grid">
                 {slices?.map((s, i) => (
                   <a href={s} target="_blank" download key={i}>
