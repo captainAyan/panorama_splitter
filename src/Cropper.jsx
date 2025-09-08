@@ -148,11 +148,10 @@ const Cropper = ({ image, setCropData }) => {
   };
 
   const stopDrag = () => {
+    const canvas = canvasRef.current;
+    canvas.style.cursor = "grab";
     if (draggingCropController) {
       setDraggingCropController(null);
-
-      const canvas = canvasRef.current;
-      canvas.style.cursor = "grab";
 
       const realImageCropX = parseInt(
         (topLeftCropController.x / canvasWidth) * image.width
@@ -169,13 +168,6 @@ const Cropper = ({ image, setCropData }) => {
         ((bottomRightCropController.y - topLeftCropController.y) /
           canvasHeight) *
           image.height
-      );
-
-      console.log(
-        realImageCropX,
-        realImageCropY,
-        realImageCropWidth,
-        realImageCropHeight
       );
 
       setCropData({
