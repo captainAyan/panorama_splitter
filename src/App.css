@@ -90,7 +90,7 @@ html {
   border-radius: 32px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   padding: 16px 36px 40px 36px;
-  flex-grow: 1;
+  /* flex-grow: 1; */
   min-width: 300px;
   height: fit-content;
 }
@@ -100,10 +100,12 @@ html {
 }
 
 .card-left {
+  flex-grow: 1;
   flex: 2;
 }
 
 .card-right {
+  flex-grow: 1;
   flex: 1;
 }
 

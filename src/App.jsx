@@ -105,72 +105,75 @@ function App() {
           </header>
 
           <div className="cards-row">
-            <div className="card card-left">
-              <h2 className="card-header">Create your panorama slides</h2>
+            <div className="card-left">
+              <div className="card">
+                <h2 className="card-header">Create your panorama slides</h2>
 
-              {!image && <Uploader setImage={setImage} />}
+                {!image && <Uploader setImage={setImage} />}
 
-              {image && (
-                <>
-                  {allowCropping === CroppingSettings.ALLOW_CROPPING && (
-                    <Cropper image={image} setCropData={setCropData} />
-                  )}
-                  {allowCropping === CroppingSettings.NO_CROPPING && (
-                    <img
-                      src={image.src}
+                {image && (
+                  <>
+                    {allowCropping === CroppingSettings.ALLOW_CROPPING && (
+                      <Cropper image={image} setCropData={setCropData} />
+                    )}
+                    {allowCropping === CroppingSettings.NO_CROPPING && (
+                      <img
+                        src={image.src}
+                        style={{
+                          width: "100%",
+                          marginTop: "20px",
+                          display: "block",
+                          borderRadius: "8px",
+                        }}
+                      />
+                    )}
+
+                    <div
                       style={{
-                        width: "100%",
-                        marginTop: "20px",
-                        display: "block",
-                        borderRadius: "8px",
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: "24px",
                       }}
-                    />
-                  )}
-
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1fr",
-                      gap: "24px",
-                    }}
-                  >
-                    <button
-                      onClick={handleImageRemoval}
-                      className="button red-button"
                     >
-                      Remove Image
-                    </button>
+                      <button
+                        onClick={handleImageRemoval}
+                        className="button red-button"
+                      >
+                        Remove Image
+                      </button>
 
-                    <button
-                      className="button generate-button"
-                      onClick={handleGenerate}
-                    >
-                      Generate Slices
-                    </button>
+                      <button
+                        className="button generate-button"
+                        onClick={handleGenerate}
+                      >
+                        Generate Slices
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+              {slices.length !== 0 && (
+                <div className="card" style={{ marginTop: "32px" }}>
+                  <h2 className="card-header">Panorama Slides</h2>
+                  <div className="image-grid">
+                    {slices?.map((s, i) => (
+                      <a href={s} target="_blank" download key={i}>
+                        <img src={s} alt="" className="sliced-image" />
+                      </a>
+                    ))}
                   </div>
-                </>
+                </div>
               )}
             </div>
 
-            <div className="card card-right">
-              <Settings />
+            <div className="card-right">
+              <div className="card">
+                <Settings />
 
-              {image && <Details image={image} />}
-            </div>
-          </div>
-
-          {slices.length !== 0 && (
-            <div className="card" style={{ marginTop: "32px" }}>
-              <h2 className="card-header">Panorama Slides</h2>
-              <div className="image-grid">
-                {slices?.map((s, i) => (
-                  <a href={s} target="_blank" download key={i}>
-                    <img src={s} alt="" className="sliced-image" />
-                  </a>
-                ))}
+                {image && <Details image={image} />}
               </div>
             </div>
-          )}
+          </div>
 
           <footer>
             &copy; {new Date().getFullYear()} Insta Panorama Splitter
