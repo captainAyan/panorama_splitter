@@ -7,9 +7,9 @@
   </p>
 </p>
 
-<center>
-![Poster](https://github.com/captainayan/panorama_splitter/blob/main/images/screenshot.jpg?raw=true)
-</center>
+<p align="center">
+  <img src="https://github.com/captainayan/panorama_splitter/blob/main/images/screenshot.jpg?raw=true"/>
+</p>
 
 🙏🥺 Consider starring this project.
 
