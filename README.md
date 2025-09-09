@@ -3,11 +3,13 @@
   <p align="center">
     Easily split your panoramic images into Instagram-ready slices with perfect proportions
     <br />
-    <a href="https://panorama-splitter.vercel.app/">Website</a>
+    <a href="https://panorama-splitter.vercel.app/" target="_blank">Website</a>
   </p>
 </p>
 
-![Poster](https://github.com/captainayan/panorama_splitter/blob/main/images/screenshot.png?raw=true)
+<center>
+![Poster](https://github.com/captainayan/panorama_splitter/blob/main/images/screenshot.jpg?raw=true)
+</center>
 
 🙏🥺 Consider starring this project.
 
