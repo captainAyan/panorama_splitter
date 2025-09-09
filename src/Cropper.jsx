@@ -33,8 +33,9 @@ const Cropper = ({ image, setCropData }) => {
 
   const aspectRatio = useStore((store) => store.aspectRatio);
 
-  // dynamically resize canvas to match CSS dimensions
   useEffect(() => {
+    updateCropData();
+
     const canvas = canvasRef.current;
     const resizeCanvas = () => {
       console.log("resizing");
@@ -153,30 +154,32 @@ const Cropper = ({ image, setCropData }) => {
     if (draggingCropController) {
       setDraggingCropController(null);
 
-      const realImageCropX = parseInt(
-        (topLeftCropController.x / canvasWidth) * image.width
-      );
-      const realImageCropY = parseInt(
-        (topLeftCropController.y / canvasHeight) * image.height
-      );
-      const realImageCropWidth = parseInt(
-        ((bottomRightCropController.x - topLeftCropController.x) /
-          canvasWidth) *
-          image.width
-      );
-      const realImageCropHeight = parseInt(
-        ((bottomRightCropController.y - topLeftCropController.y) /
-          canvasHeight) *
-          image.height
-      );
-
-      setCropData({
-        x: realImageCropX,
-        y: realImageCropY,
-        width: realImageCropWidth,
-        height: realImageCropHeight,
-      });
+      updateCropData();
     }
+  };
+
+  const updateCropData = () => {
+    const realImageCropX = parseInt(
+      (topLeftCropController.x / canvasWidth) * image.width
+    );
+    const realImageCropY = parseInt(
+      (topLeftCropController.y / canvasHeight) * image.height
+    );
+    const realImageCropWidth = parseInt(
+      ((bottomRightCropController.x - topLeftCropController.x) / canvasWidth) *
+        image.width
+    );
+    const realImageCropHeight = parseInt(
+      ((bottomRightCropController.y - topLeftCropController.y) / canvasHeight) *
+        image.height
+    );
+
+    setCropData({
+      x: realImageCropX,
+      y: realImageCropY,
+      width: realImageCropWidth,
+      height: realImageCropHeight,
+    });
   };
 
   // Draw the canvas on each render

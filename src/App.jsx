@@ -7,11 +7,16 @@ import Details from "./Details";
 import Settings from "./Settings";
 import Cropper from "./Cropper";
 import { CroppingSettings } from "./constants";
+import {
+  generateSliceImageURLArray,
+  generateCroppedCanvas,
+  croppedCanvasToImage,
+} from "./util";
 
 function App() {
   const [slices, setSlices] = useState([]);
   const [image, setImage] = useState();
-  const [cropData, setCropData] = useState();
+  const [cropData, setCropData] = useState(); // {x, y, width, height}
 
   const aspectRatio = useStore((state) => state.aspectRatio);
   const fillColor = useStore((state) => state.fillColor);
@@ -22,74 +27,15 @@ function App() {
     setImage(null);
   };
 
-  const handleGenerate = () => {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+  const handleGenerate = async () => {
+    let img = image;
 
-    const frameHeight =
-      cropData && allowCropping ? cropData.height : image.height;
-    const frameWidth = parseInt(frameHeight * aspectRatio);
-
-    canvas.width = frameWidth;
-    canvas.height = frameHeight;
-
-    let imageSources = [];
-
-    let sliceCount =
-      cropData && allowCropping
-        ? Math.ceil(cropData.width / frameWidth)
-        : Math.ceil(image.width / frameWidth);
-    for (let i = 0; i < sliceCount; i++) {
-      ctx.fillStyle = fillColor;
-      ctx.fillRect(0, 0, frameWidth, frameHeight);
-      ctx.fill();
-
-      let startingPoint =
-        cropData && allowCropping
-          ? {
-              x: frameWidth * i + cropData.x,
-              y: cropData.y,
-            }
-          : {
-              x: frameWidth * i,
-              y: 0,
-            };
-
-      ctx.drawImage(
-        image,
-        startingPoint.x,
-        startingPoint.y,
-        frameWidth,
-        frameHeight,
-        0,
-        0,
-        frameWidth,
-        frameHeight
-      );
-
-      imageSources = [...imageSources, canvas.toDataURL()];
+    if (allowCropping === CroppingSettings.ALLOW_CROPPING && cropData) {
+      const croppedImg = generateCroppedCanvas(img, cropData);
+      img = await croppedCanvasToImage(croppedImg);
     }
 
-    // Full panorama slide
-    ctx.fillStyle = fillColor;
-    ctx.fillRect(0, 0, frameWidth, frameHeight);
-    ctx.fill();
-
-    let paddingAdjustedFrameWidth = frameWidth - padding * 2;
-    let scaledImageHeight =
-      (paddingAdjustedFrameWidth / image.width) * frameHeight;
-
-    ctx.drawImage(
-      image,
-      padding,
-      (frameHeight - scaledImageHeight) / 2,
-      frameWidth - padding * 2,
-      scaledImageHeight
-    );
-
-    imageSources = [...imageSources, canvas.toDataURL()];
-
-    setSlices(imageSources);
+    setSlices(generateSliceImageURLArray(img, aspectRatio, fillColor, padding));
   };
 
   return (
@@ -170,7 +116,7 @@ function App() {
               <div className="card">
                 <Settings />
 
-                {image && <Details image={image} />}
+                {image && <Details image={image} cropData={cropData} />}
               </div>
             </div>
           </div>
