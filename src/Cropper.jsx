@@ -17,6 +17,7 @@ const Cropper = ({ image, setCropData }) => {
   const cropControllerColor = "#00ff00";
   const croppedAreaColor = "#000000aa";
   const cropLineColor = "#ff00ff";
+  const splitLineColor = "#ffff00";
 
   const canvasRef = useRef(null);
 
@@ -251,6 +252,7 @@ const Cropper = ({ image, setCropData }) => {
     let frameCount = Math.floor(cropWidth / frameWidth); // full frames, not partially filled ones
 
     for (let i = 1; i <= frameCount; i++) {
+      ctx.strokeStyle = splitLineColor;
       ctx.beginPath();
       ctx.moveTo(
         i * frameWidth + topLeftCropController.x,
