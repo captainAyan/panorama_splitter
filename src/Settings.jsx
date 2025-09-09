@@ -25,7 +25,7 @@ export default function Settings() {
   };
 
   const handleAllowCroppingChange = (e) => {
-    setIsCroppingEnabled(e.target.value);
+    setIsCroppingEnabled(e.target.value === "true");
   };
 
   return (
@@ -114,7 +114,7 @@ export default function Settings() {
             type="radio"
             name="isCroppingEnabled"
             value={false}
-            checked={!isCroppingEnabled}
+            checked={isCroppingEnabled === false}
             onChange={handleAllowCroppingChange}
           />
           <span className="custom-radio-label">No Crop</span>
@@ -125,7 +125,7 @@ export default function Settings() {
             type="radio"
             name="isCroppingEnabled"
             value={true}
-            checked={isCroppingEnabled}
+            checked={isCroppingEnabled === true}
             onChange={handleAllowCroppingChange}
           />
           <span className="custom-radio-label">Crop</span>
