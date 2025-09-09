@@ -1,16 +1,16 @@
 import { useStore } from "./store";
-import { AspectRatio, CroppingSettings, FillColor } from "./constants";
+import { AspectRatio, FillColor } from "./constants";
 
 export default function Settings() {
   const aspectRatio = useStore((state) => state.aspectRatio);
   const fillColor = useStore((state) => state.fillColor);
   const padding = useStore((state) => state.padding);
-  const allowCropping = useStore((state) => state.allowCropping);
+  const isCroppingEnabled = useStore((state) => state.isCroppingEnabled);
 
   const setAspectRatio = useStore((state) => state.setAspectRatio);
   const setFillColor = useStore((state) => state.setFillColor);
   const setPadding = useStore((state) => state.setPadding);
-  const setAllowCropping = useStore((state) => state.setAllowCropping);
+  const setIsCroppingEnabled = useStore((state) => state.setIsCroppingEnabled);
 
   const handleAspectRatioChange = (e) => {
     setAspectRatio(e.target.value);
@@ -25,7 +25,7 @@ export default function Settings() {
   };
 
   const handleAllowCroppingChange = (e) => {
-    setAllowCropping(e.target.value);
+    setIsCroppingEnabled(e.target.value);
   };
 
   return (
@@ -112,9 +112,9 @@ export default function Settings() {
         <label className="radio-option">
           <input
             type="radio"
-            name="allowCropping"
-            value={CroppingSettings.NO_CROPPING}
-            checked={allowCropping === CroppingSettings.NO_CROPPING}
+            name="isCroppingEnabled"
+            value={false}
+            checked={!isCroppingEnabled}
             onChange={handleAllowCroppingChange}
           />
           <span className="custom-radio-label">No Crop</span>
@@ -123,9 +123,9 @@ export default function Settings() {
         <label className="radio-option">
           <input
             type="radio"
-            name="allowCropping"
-            value={CroppingSettings.ALLOW_CROPPING}
-            checked={allowCropping === CroppingSettings.ALLOW_CROPPING}
+            name="isCroppingEnabled"
+            value={true}
+            checked={isCroppingEnabled}
             onChange={handleAllowCroppingChange}
           />
           <span className="custom-radio-label">Crop</span>

@@ -6,7 +6,6 @@ import Uploader from "./Uploader";
 import Details from "./Details";
 import Settings from "./Settings";
 import Cropper from "./Cropper";
-import { CroppingSettings } from "./constants";
 import {
   generateSliceImageURLArray,
   generateCroppedCanvas,
@@ -21,7 +20,7 @@ function App() {
   const aspectRatio = useStore((state) => state.aspectRatio);
   const fillColor = useStore((state) => state.fillColor);
   const padding = useStore((state) => state.padding);
-  const allowCropping = useStore((state) => state.allowCropping);
+  const isCroppingEnabled = useStore((state) => state.isCroppingEnabled);
 
   const handleImageRemoval = () => {
     setImage(null);
@@ -30,7 +29,7 @@ function App() {
   const handleGenerate = async () => {
     let img = image;
 
-    if (allowCropping === CroppingSettings.ALLOW_CROPPING && cropData) {
+    if (isCroppingEnabled && cropData) {
       const croppedImg = generateCroppedCanvas(img, cropData);
       img = await croppedCanvasToImage(croppedImg);
     }
@@ -59,10 +58,10 @@ function App() {
 
                 {image && (
                   <>
-                    {allowCropping === CroppingSettings.ALLOW_CROPPING && (
+                    {isCroppingEnabled && (
                       <Cropper image={image} setCropData={setCropData} />
                     )}
-                    {allowCropping === CroppingSettings.NO_CROPPING && (
+                    {!isCroppingEnabled && (
                       <img
                         src={image.src}
                         style={{
