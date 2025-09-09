@@ -7,29 +7,29 @@ export function generateSliceImageURLArray(
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
-  const frame_height = image.height;
-  const frame_width = parseInt(frame_height * aspectRatio);
+  const frameHeight = image.height;
+  const frameWidth = parseInt(frameHeight * aspectRatio);
 
-  canvas.width = frame_width;
-  canvas.height = frame_height;
+  canvas.width = frameWidth;
+  canvas.height = frameHeight;
 
   let imageSources = [];
 
-  for (let i = 0; i < Math.ceil(image.width / frame_width); i++) {
+  for (let i = 0; i < Math.ceil(image.width / frameWidth); i++) {
     ctx.fillStyle = fillColor;
-    ctx.fillRect(0, 0, frame_width, frame_height);
+    ctx.fillRect(0, 0, frameWidth, frameHeight);
     ctx.fill();
 
     ctx.drawImage(
       image,
-      frame_width * i,
+      frameWidth * i,
       0,
-      frame_width,
-      frame_height,
+      frameWidth,
+      frameHeight,
       0,
       0,
-      frame_width,
-      frame_height
+      frameWidth,
+      frameHeight
     );
 
     imageSources = [...imageSources, canvas.toDataURL()];
@@ -37,18 +37,22 @@ export function generateSliceImageURLArray(
 
   // Full panorama slide
   ctx.fillStyle = fillColor;
-  ctx.fillRect(0, 0, frame_width, frame_height);
+  ctx.fillRect(0, 0, frameWidth, frameHeight);
   ctx.fill();
 
-  let paddingAdjustedFrameWidth = frame_width - padding * 2;
+  canvas.width = 1080; // frame width
+  canvas.height = 1080 / aspectRatio; // frame height
+
+  let paddingAdjustedFrameWidth = canvas.width - padding * 2;
   let scaledImageHeight =
-    (paddingAdjustedFrameWidth / image.width) * frame_height;
+    (paddingAdjustedFrameWidth / canvas.width) * image.height;
+  let topPadding = (canvas.height - scaledImageHeight) / 2;
 
   ctx.drawImage(
     image,
     padding,
-    (frame_height - scaledImageHeight) / 2,
-    frame_width - padding * 2,
+    topPadding,
+    paddingAdjustedFrameWidth,
     scaledImageHeight
   );
 
