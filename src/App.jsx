@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useStore } from "./store";
 
-import "./App.css";
 import Uploader from "./Uploader";
 import Details from "./Details";
 import Settings from "./Settings";
