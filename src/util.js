@@ -1,3 +1,5 @@
+import JSZip from "jszip";
+
 export function generateSliceImageURLArray(
   image,
   aspectRatio,
@@ -90,4 +92,38 @@ export function croppedCanvasToImage(croppedCanvas) {
     img.onload = () => resolve(img);
     img.src = dataURL;
   });
+}
+
+export async function createZipFromDataURLs(dataUrls) {
+  const zip = new JSZip();
+
+  for (let i = 0; i < dataUrls.length; i++) {
+    const dataUrl = dataUrls[i];
+    const base64Data = dataUrl.split(",")[1];
+    const fileName = `image${i + 1}.png`;
+
+    const binaryData = base64ToBinary(base64Data);
+
+    zip.file(fileName, binaryData, { binary: true });
+  }
+
+  const zipBlob = await zip.generateAsync({ type: "blob" });
+
+  return zipBlob;
+
+  // Trigger download using FileSaver.js (or you can use a direct link in the browser)
+  // const link = document.createElement("a");
+  // link.href = URL.createObjectURL(zipBlob);
+  // link.download = "images.zip"; // Name of the zip file
+  // link.click();
+}
+
+export function base64ToBinary(base64) {
+  const binaryString = atob(base64);
+  const len = binaryString.length;
+  const binaryArray = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    binaryArray[i] = binaryString.charCodeAt(i);
+  }
+  return binaryArray;
 }

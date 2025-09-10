@@ -251,6 +251,11 @@ html {
   border: none;
   border-radius: 12px;
   transition: all 0.3s ease;
+
+  /* for anchor tag */
+  display: block;
+  text-decoration: none;
+  text-align: center;
 }
 
 .button.red-button {
@@ -285,6 +290,13 @@ html {
   );
   background-size: 500%;
   animation: anime 10s linear infinite;
+}
+
+.button.download-button {
+  background-color: #a478f1;
+}
+.button.download-button:hover {
+  background-color: #8964c9;
 }
 
 footer {

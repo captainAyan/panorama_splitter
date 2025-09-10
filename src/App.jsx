@@ -9,12 +9,14 @@ import {
   generateSliceImageURLArray,
   generateCroppedCanvas,
   croppedCanvasToImage,
+  createZipFromDataURLs,
 } from "./util";
 
 function App() {
   const [slices, setSlices] = useState([]);
   const [image, setImage] = useState();
   const [cropData, setCropData] = useState(); // {x, y, width, height}
+  const [zipDataURL, setZipDataURL] = useState();
 
   const aspectRatio = useStore((state) => state.aspectRatio);
   const fillColor = useStore((state) => state.fillColor);
@@ -33,8 +35,23 @@ function App() {
       img = await croppedCanvasToImage(croppedImg);
     }
 
-    setSlices(generateSliceImageURLArray(img, aspectRatio, fillColor, padding));
+    const imageURLArray = generateSliceImageURLArray(
+      img,
+      aspectRatio,
+      fillColor,
+      padding
+    );
+
+    setSlices(imageURLArray);
+
+    const zipDataURL = URL.createObjectURL(
+      await createZipFromDataURLs(imageURLArray)
+    );
+
+    setZipDataURL(zipDataURL);
   };
+
+  const handleDownload = async () => {};
 
   return (
     <div className="app-wrapper">
@@ -106,6 +123,15 @@ function App() {
                       </a>
                     ))}
                   </div>
+
+                  <a
+                    className="button download-button"
+                    onClick={handleDownload}
+                    href={zipDataURL}
+                    download="images.zip"
+                  >
+                    Download Zip
+                  </a>
                 </div>
               )}
             </div>
