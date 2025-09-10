@@ -36,12 +36,12 @@ export function generateSliceImageURLArray(
   }
 
   // Full panorama slide
-  ctx.fillStyle = fillColor;
-  ctx.fillRect(0, 0, frameWidth, frameHeight);
-  ctx.fill();
-
   canvas.width = 1080; // frame width
   canvas.height = 1080 / aspectRatio; // frame height
+
+  ctx.fillStyle = fillColor;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fill();
 
   let paddingAdjustedFrameWidth = canvas.width - padding * 2;
   let scaledImageHeight =
